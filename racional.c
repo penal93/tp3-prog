@@ -108,7 +108,8 @@ struct racional *cria_r (long numerador, long denominador){
 }
 
 void destroi_r (struct racional **r){
-
+  free(*r);
+  *r = NULL;
 }
 
 int valido_r (struct racional *r){
@@ -116,5 +117,10 @@ int valido_r (struct racional *r){
     return 0;
 
   return 1;
+}
+
+int compara_r (struct racional *r1, struct racional *r2){
+
+
 }
 
