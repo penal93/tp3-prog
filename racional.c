@@ -47,6 +47,16 @@ long mmc (long a, long b)
   return (a * b) / mdc(a, b);
 }
 
+int valido_r (struct racional *r){
+  if (!r)
+    return 0;
+
+  if (r->den == 0)
+    return 0;
+
+  return 1;
+}
+
 /* Simplifica o número racional indicado no parâmetro.
  * Por exemplo, se o número for 10/8 muda para 5/4.
  * Retorna 1 em sucesso e 0 se r for inválido ou o ponteiro for nulo.
@@ -54,7 +64,7 @@ long mmc (long a, long b)
  * Se o denominador for negativo, o sinal deve migrar para o numerador. */
 int simplifica_r (struct racional *r)
 {
-  if (!valido(r))
+  if (valido_r(r) == 0)
     return 0;
 
   if (!r)
@@ -62,8 +72,8 @@ int simplifica_r (struct racional *r)
 
   long divisor = mdc(r->num, r->den);
 
-  r->num *= r->num / divisor;
-  r->den *= r->den / divisor; 
+  r->num /= divisor;
+  r->den /= divisor; 
 
   if (r->den < 0){
     r->num *= (-1);
@@ -76,20 +86,10 @@ int simplifica_r (struct racional *r)
 /* implemente as demais funções de racional.h aqui */
 
 long numerador_r (struct racional *r){
-  long numerador;
-
-  scanf("%ld", &numerador);
-  r->num = numerador;
-
   return r->num;
 }
 
 long denominador_r (struct racional *r){
-  long denominador;
-
-  scanf("%ld", &denominador);
-  r->den = denominador;
-
   return r->den;
 }
 
@@ -104,23 +104,126 @@ struct racional *cria_r (long numerador, long denominador){
   p->num = numerador;
   p->den = denominador;
 
+  simplifica_r(p);
+
   return p;
 }
+
+void imprime_r (struct racional *r){
+  if (valido_r(r) == 0){
+    printf ("NaN ");
+    return ;
+  }
+  
+  if (r->num == 0){
+    printf("0 ");
+    return ;
+  }
+
+  if (r->den == 1){
+    printf("%ld ", r->num);
+    return ;
+  }
+  
+  if (r->den == r->num){
+    printf("1 ");
+    return ;
+  }
+  
+  printf("%ld/%ld ", r->num, r->den);
+}
+
 
 void destroi_r (struct racional **r){
   free(*r);
   *r = NULL;
 }
 
-int valido_r (struct racional *r){
-  if (r->den == 0)
+int compara_r (struct racional *r1, struct racional *r2){
+  if (valido_r(r1) == 0 || valido_r(r2) == 0)
+    return -2;
+
+  if (!r1 || !r2)
+    return -2;
+  
+  if (r1->num == r2->num && r1->den == r2->den)
     return 0;
+
+  long newDen = mmc(r1->den, r2->den);
+  long newNum1 = r1->num * newDen/r1->den;
+  long newNum2 = r2->num * newDen/r2->den;
+
+  if (newNum1 > newNum2)
+    return 1;
+
+  return -1;
+}
+
+int soma_r (struct racional *r1, struct racional *r2, struct racional *r3){
+  if (!r1 || !r2)
+    return 0;
+
+  if (valido_r(r1) == 0 || valido_r(r2) == 0)
+    return 0;
+
+  long newDen = mmc(r1->den, r2->den);
+  long newNum1 = r1->num * newDen/r1->den;
+  long newNum2 = r2->num * newDen/r2->den;
+  
+  r3->den = newDen;
+  r3->num = newNum1 + newNum2;
+
+  simplifica_r(r3);
 
   return 1;
 }
 
-int compara_r (struct racional *r1, struct racional *r2){
+int subtrai_r (struct racional *r1, struct racional *r2, struct racional *r3){
+  if (!r1 || !r2)
+    return 0;
 
+  if (valido_r(r1) == 0 || valido_r(r2) == 0)
+    return 0;
 
+  long newDen = mmc(r1->den, r2->den);
+  long newNum1 = r1->num * newDen/r1->den;
+  long newNum2 = r2->num * newDen/r2->den;
+  
+  r3->den = newDen;
+  r3->num = newNum1 - newNum2;
+
+  simplifica_r(r3);
+
+  return 1;
+}
+
+int multiplica_r (struct racional *r1, struct racional *r2, struct racional *r3){
+  if (!r1 || !r2)
+    return 0;
+
+  if (valido_r(r1) == 0 || valido_r(r2) == 0)
+    return 0;
+
+  r3->den = r1->den * r2->den;
+  r3->num = r1->num * r2->num;
+
+  simplifica_r(r3);
+
+  return 1;
+}
+
+int divide_r (struct racional *r1, struct racional *r2, struct racional *r3){
+  if (!r1 || !r2)
+    return 0;
+
+  if (valido_r(r1) == 0 || valido_r(r2) == 0)
+    return 0;
+
+  r3->den = r1->den * r2->num;
+  r3->num = r1->num * r2->den;
+
+  simplifica_r(r3);
+
+  return 1;
 }
 
