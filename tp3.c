@@ -20,18 +20,47 @@ void imprime_vetor (struct racional** vetor, long tam){
   printf("\n");
 }
 
-void elimina_elemento (int pos, struct racional** vetor, long* tam){
-  for (int i = pos; )
-}
+void elimina_vetor (struct racional** vetor, long *tam){
+  int i = 0;
 
-void elimina_NaN (struct racional** vetor, long *tam){
-  for (int i = 0; i < *tam; i++){
+  while (i < *tam){
 
     if (valido_r(vetor[i]) == 0){
       free(vetor[i]);
-      printf("um NaN foi identificado no indice: %d \n", i);
+      for (int j = i; j < *tam; j++)
+          vetor[j] = vetor[j + 1];
+      (*tam)--;
+    }
 
+    else 
+      i++;
+  }
+}
 
+void selectSort (struct racional** vetor, long tam){
+  int min;
+  struct racional* aux;
+
+  for (int i = 0; i < tam - 1; i++){
+    min = i;
+
+    for (int j = i + 1; j < tam; j++)
+      if (compara_r(vetor[min], vetor[j]) == 1)
+        min = j;
+
+    aux = vetor[min];
+    vetor[min] = vetor[i];
+    vetor[i] = aux;
+  }
+}
+
+struct racional *soma_vetor (struct racional **vetor, long tam){
+  struct racional *p = cria_r(0, 1);
+
+  for (int i = 0; i < tam; i ++)
+    soma_r (vetor[i], p, p);
+
+  return p;
 }
 
 /* programa principal */
@@ -57,7 +86,14 @@ int main ()
 
   elimina_vetor(vetor, n);
   imprime_vetor(vetor, *n);
-  printf("o tamanho do tam eh: %ld \n", *n);
+
+  selectSort(vetor, *n);
+  imprime_vetor(vetor, *n);
+
+  struct racional *soma = soma_vetor(vetor, *n);
+  printf("SOMA = ");
+  imprime_r(soma);
+  printf("\n");
 
   return 0;
 }
