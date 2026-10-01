@@ -20,19 +20,18 @@ void imprime_vetor (struct racional** vetor, long tam){
   printf("\n");
 }
 
-void elimina_vetor (struct racional** vetor, long *tam){
+void elimina_elemento (int pos, struct racional** vetor, long* tam){
+  for (int i = pos; )
+}
+
+void elimina_NaN (struct racional** vetor, long *tam){
   for (int i = 0; i < *tam; i++){
 
     if (valido_r(vetor[i]) == 0){
       free(vetor[i]);
       printf("um NaN foi identificado no indice: %d \n", i);
 
-      for (int j = i; j < *tam; j++)
-        vetor[j] = vetor[j + 1];
 
-      (*tam)--;
-    }
-  }
 }
 
 /* programa principal */
