@@ -63,6 +63,13 @@ struct racional *soma_vetor (struct racional **vetor, long tam){
   return p;
 }
 
+void destroi_vetor (struct racional **vetor, long tam){
+  for (int i = 0; i < tam; i++){
+    free(vetor[i]);
+    vetor[i] = NULL;
+  }
+}
+
 /* programa principal */
 int main ()
 {
@@ -93,6 +100,10 @@ int main ()
   struct racional *soma = soma_vetor(vetor, *n);
   printf("SOMA = ");
   imprime_r(soma);
+  printf("\n");
+
+  destroi_vetor(vetor, *n);
+  imprime_vetor(vetor, *n);
   printf("\n");
 
   return 0;
