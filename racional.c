@@ -110,27 +110,32 @@ struct racional *cria_r (long numerador, long denominador){
 }
 
 void imprime_r (struct racional *r){
+  if (!r){
+    printf(" NULL");
+    return ;
+  }
+
   if (valido_r(r) == 0){
-    printf ("NaN ");
+    printf (" NaN");
     return ;
   }
   
   if (r->num == 0){
-    printf("0 ");
+    printf(" 0");
     return ;
   }
 
   if (r->den == 1){
-    printf("%ld ", r->num);
+    printf(" %ld", r->num);
     return ;
   }
   
   if (r->den == r->num){
-    printf("1 ");
+    printf(" 1");
     return ;
   }
   
-  printf("%ld/%ld ", r->num, r->den);
+  printf(" %ld/%ld", r->num, r->den);
 }
 
 

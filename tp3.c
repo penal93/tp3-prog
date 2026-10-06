@@ -12,9 +12,11 @@
 /* coloque aqui as funções auxiliares que precisar neste arquivo */
 
 void imprime_vetor (struct racional** vetor, long tam){
-  printf("VETOR = ");
+  int i;
+  
+  printf("VETOR =");
 
-  for (int i = 0; i < tam; i++)
+  for (i = 0; i < tam; i++)
     imprime_r(vetor[i]);
 
   printf("\n");
@@ -98,7 +100,7 @@ int main ()
   imprime_vetor(vetor, *n);
 
   struct racional *soma = soma_vetor(vetor, *n);
-  printf("SOMA = ");
+  printf("SOMA =");
   imprime_r(soma);
   printf("\n");
 
